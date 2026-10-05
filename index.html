@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#55745b" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="마비노기 숙제" />
+<title>마비노기 숙제 체크리스트</title>
+<style>
+:root{--bg:#f6f3ea;--card:#fffdf8;--ink:#29261f;--muted:#777064;--line:#e7dfd0;--accent:#55745b;--accent2:#dfeadf;--danger:#a34d4d;--shadow:0 8px 26px rgba(56,48,35,.08)}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(#eef3e8,#f8f4eb 240px);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:var(--ink)}
+.app{max-width:900px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) calc(76px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.hero{padding:20px 18px 12px}.hero h1{margin:0;font-size:28px}.hero p{margin:6px 0;color:var(--muted);font-size:14px}.toolbar,.tabs,.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,input{font:inherit} button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer;color:var(--ink)}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button.danger{color:var(--danger)}button.small{padding:5px 8px;border-radius:9px;font-size:12px}.tabs{padding:0 18px 14px}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:720px){.grid{grid-template-columns:1fr}.hero h1{font-size:24px}.app{padding-left:10px;padding-right:10px}.hero{padding-left:10px;padding-right:10px}.tabs{padding-left:10px;padding-right:10px;overflow-x:auto;flex-wrap:nowrap}.tabs button{flex:0 0 auto}.char-title{padding-left:10px;padding-right:10px}.history{margin-left:10px;margin-right:10px}.card{padding:14px}.option{min-height:44px}button{min-height:42px}.small{min-height:34px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px}.card h2{font-size:19px;margin:0 0 6px}.sub{color:var(--muted);font-size:12px;margin-bottom:12px}.progress{height:10px;background:#eee8dc;border-radius:99px;overflow:hidden;margin:8px 0 14px}.progress>div{height:100%;background:var(--accent);transition:.2s}.task{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line)}.task:last-child{border-bottom:0}.task input[type=checkbox]{width:19px;height:19px;margin-top:1px;accent-color:var(--accent)}.task .txt{flex:1;white-space:pre-line}.task.done .txt{text-decoration:line-through;color:#918a7f}.task .mini-actions{display:flex;gap:4px;opacity:.75}.section{margin:12px 0;padding:12px;border-radius:14px;background:#faf7f0;border:1px solid var(--line)}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.section-title{font-weight:800}.pill{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--accent2);color:#39543e}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}@media(max-width:430px){.options{grid-template-columns:1fr}}.option{display:flex;gap:7px;align-items:center;background:#fff;border:1px solid var(--line);padding:8px;border-radius:10px}.option input{accent-color:var(--accent)}
+.history{margin:0 18px 14px;padding:12px 14px;background:#fff9e9;border:1px solid #eadfbf;border-radius:14px;font-size:13px}.history b{display:block;margin-bottom:5px}.empty{color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal.show{display:flex}.dialog{width:min(520px,100%);background:white;border-radius:18px;padding:18px;box-shadow:var(--shadow)}.dialog h3{margin-top:0}.dialog input,.dialog textarea,.dialog select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin:6px 0 12px;font:inherit}.dialog textarea{min-height:110px;resize:vertical}.right{justify-content:flex-end}.note{font-size:12px;color:var(--muted);line-height:1.5}.char-title{display:flex;gap:8px;align-items:center;padding:0 18px 14px}.char-title strong{font-size:18px}.footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+</style>
+</head>
+<body><div class="app">
+<div class="hero"><h1>⚔️ 마비노기 숙제 체크리스트</h1><p>매일 07:00 일일 초기화 · 매주 월요일 07:00 주간 초기화 · 이 브라우저에 자동 저장</p></div>
+<div class="tabs" id="tabs"></div>
+<div class="char-title"><strong id="charName"></strong><button class="small" onclick="renameChar()">이름 수정</button><button class="small danger" onclick="deleteChar()">캐릭터 삭제</button><button class="primary small" onclick="addChar()">＋ 부캐 추가</button></div>
+<div class="history" id="history"></div>
+<div class="grid">
+<section class="card"><h2>☀️ 일일 숙제</h2><div class="sub" id="dailyCount"></div><div class="progress"><div id="dailyBar"></div></div><div id="daily"></div><button style="margin-top:12px" onclick="addTask('daily')">＋ 일일 할 일 추가</button></section>
+<section class="card"><h2>📅 주간 숙제</h2><div class="sub" id="weeklyCount"></div><div class="progress"><div id="weeklyBar"></div></div><div id="weekly"></div><button style="margin-top:12px" onclick="addTask('weekly')">＋ 주간 할 일 추가</button></section>
+</div><div class="footer-note">초기화는 페이지를 열었을 때 현재 시각을 확인해 처리됩니다. 기록과 설정은 이 기기의 현재 브라우저에 저장됩니다.</div>
+</div>
+<div class="modal" id="modal"><div class="dialog"><h3 id="modalTitle"></h3><div id="modalBody"></div><div class="actions right"><button onclick="closeModal()">취소</button><button class="primary" id="modalSave">저장</button></div></div></div>
+<script>
+const KEY='mabinogi_task_manager_v2';
+const dungeonNames=['피오드','룬다','페카 고분','페론 고분','바리 1광구','바리 2광구','마스','라비','키아','알비','남쪽 폐허','북쪽 폐허'];
+const huntNames=['창백한 산','센마이 평원','구름 황야','여신의 뜰','늑대의 숲','얼음 협곡'];
+const stages=['1-1','1-2','1-3','2-1','2-2','2-3'];
+const defaultDaily=[
+ t('심층 던전'), group('던전 돌기','dungeon', dungeonNames.flatMap(n=>stages.map(s=>n+' '+s))),
+ t('창백한 산'), group('사냥터 돌기','hunt',huntNames), t('요일 던전'),t('아르바이트'),t('검은 구멍 1회 이상'),
+ t('제이미\n사과수플레 2 > 상금 옷감 8\n사과생크림케이크 1 > 상급 옷감+ 6'),
+ t('제롬 크림소스스테이크 1 > 상급 실크 4'),t('(두갈드아일) 엘빈 - 야채볶음 2개 > 상급 목재 8개')];
+const defaultWeekly=[t('필드보스'),t('(콜헨) 킬리안: 깔끔 진액 30개 구매'),t('(이멘마하) 아그네스: 산뜻 버섯 진액 30개 구매'),t('(이멘마하) 도나: 성수 구매'),t('(이멘마하) 델렌:\n가든샐러드 4개 > 특급목재\n호박수프 8개 > 최상급 목재/최상급 가죽'),t('아이데른: 농어매운탕 > 은합금괴'),t('어비스 3종'),t('카브락'),t('에이렐'),t('화이트 서큐버스'),...Array.from({length:7},(_,i)=>t('소환의 결계 '+(i+1)+'회')),t('뱅가드 브리치 3회')];
+function id(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function t(text){return {id:id(),type:'task',text,done:false}}
+function group(text,key,options){return {id:id(),type:'group',text,key,options,selected:''}}
+function cloneDefaults(){return {daily:JSON.parse(JSON.stringify(defaultDaily)),weekly:JSON.parse(JSON.stringify(defaultWeekly)),history:{date:'',dungeon:'',hunt:''}}}
+let data=load(); let current=data.current||data.characters[0].id;
+function load(){try{let x=JSON.parse(localStorage.getItem(KEY));if(x&&x.characters?.length){x.characters.forEach(c=>{if(!Array.isArray(c.daily)||!c.daily.length)c.daily=JSON.parse(JSON.stringify(defaultDaily));if(!Array.isArray(c.weekly)||!c.weekly.length)c.weekly=JSON.parse(JSON.stringify(defaultWeekly));if(!c.history)c.history={date:'',dungeon:'',hunt:''};});return x}}catch(e){} const c={id:id(),name:'메인 캐릭터',...cloneDefaults()};return {current:c.id,characters:[c],lastDailyBoundary:'',lastWeeklyBoundary:''}}
+function save(){data.current=current;localStorage.setItem(KEY,JSON.stringify(data))}
+function boundaryDaily(now=new Date()){let d=new Date(now);if(d.getHours()<7)d.setDate(d.getDate()-1);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function boundaryWeekly(now=new Date()){let d=new Date(now);if(d.getHours()<7)d.setDate(d.getDate()-1);let day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return boundaryDaily(new Date(d.getFullYear(),d.getMonth(),d.getDate(),7))}
+function resetIfNeeded(){let db=boundaryDaily(),wb=boundaryWeekly();if(data.lastDailyBoundary!==db){data.characters.forEach(c=>{let dg=c.daily.find(x=>x.type==='group'&&x.key==='dungeon');let hu=c.daily.find(x=>x.type==='group'&&x.key==='hunt');c.history={date:data.lastDailyBoundary||'',dungeon:dg?.selected||'',hunt:hu?.selected||''};c.daily.forEach(x=>{if(x.type==='task')x.done=false;else x.selected=''})});data.lastDailyBoundary=db}if(data.lastWeeklyBoundary!==wb){data.characters.forEach(c=>c.weekly.forEach(x=>{if(x.type==='task')x.done=false;else x.selected=''}));data.lastWeeklyBoundary=wb}save()}
+function C(){return data.characters.find(c=>c.id===current)||data.characters[0]}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function render(){resetIfNeeded();let c=C();document.getElementById('charName').textContent='👤 '+c.name;document.getElementById('tabs').innerHTML=data.characters.map(x=>`<button class="tab ${x.id===current?'active':''}" onclick="switchChar('${x.id}')">${esc(x.name)}</button>`).join('');renderHistory(c);renderList('daily',c.daily);renderList('weekly',c.weekly)}
+function renderHistory(c){let h=c.history||{};document.getElementById('history').innerHTML=`<b>🕘 어제 기록</b>${h.date?`던전: <strong>${esc(h.dungeon||'미선택')}</strong> · 사냥터: <strong>${esc(h.hunt||'미선택')}</strong> <span class="note">(${esc(h.date)} 기준)</span>`:`<span class="empty">아직 저장된 어제 기록이 없어요. 다음 일일 초기화부터 표시됩니다.</span>`}`}
+function renderList(kind,list){let html='';list.forEach(x=>{if(x.type==='task'){html+=`<div class="task ${x.done?'done':''}"><input type="checkbox" ${x.done?'checked':''} onchange="toggle('${kind}','${x.id}',this.checked)"><div class="txt">${esc(x.text)}</div><div class="mini-actions"><button class="small" onclick="editItem('${kind}','${x.id}')">✎</button><button class="small danger" onclick="removeItem('${kind}','${x.id}')">×</button></div></div>`}else{html+=`<div class="section"><div class="section-head"><div><span class="section-title">${esc(x.text)}</span> <span class="pill">${x.selected?'완료':'1개 선택 시 완료'}</span></div><div class="mini-actions"><button class="small" onclick="editGroup('${kind}','${x.id}')">✎</button><button class="small danger" onclick="removeItem('${kind}','${x.id}')">×</button></div></div><div class="options">${x.options.map(o=>`<label class="option"><input type="radio" name="${current}_${x.id}" ${x.selected===o?'checked':''} onchange="selectGroup('${kind}','${x.id}',${JSON.stringify(o).replace(/"/g,'&quot;')})"><span>${esc(o)}</span></label>`).join('')}</div></div>`}});document.getElementById(kind).innerHTML=html;let done=list.filter(x=>x.type==='task'?x.done:!!x.selected).length,total=list.length,p=total?Math.round(done/total*100):0;document.getElementById(kind+'Count').textContent=`${done} / ${total} 완료 (${p}%)`;document.getElementById(kind+'Bar').style.width=p+'%'}
+function toggle(kind,itemId,val){let x=C()[kind].find(x=>x.id===itemId);x.done=val;save();render()}
+function selectGroup(kind,itemId,val){let x=C()[kind].find(x=>x.id===itemId);x.selected=val;save();render()}
+function switchChar(cid){current=cid;save();render()}
+function modal(title,body,onSave){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalSave').onclick=onSave;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function addTask(kind){modal((kind==='daily'?'일일':'주간')+' 할 일 추가',`<label>내용</label><textarea id="editText" placeholder="할 일을 입력하세요"></textarea>`,()=>{let v=document.getElementById('editText').value.trim();if(!v)return;C()[kind].push(t(v));save();closeModal();render()})}
+function editItem(kind,itemId){let x=C()[kind].find(x=>x.id===itemId);modal('할 일 수정',`<label>내용</label><textarea id="editText">${esc(x.text)}</textarea>`,()=>{let v=document.getElementById('editText').value.trim();if(!v)return;x.text=v;save();closeModal();render()})}
+function editGroup(kind,itemId){let x=C()[kind].find(x=>x.id===itemId);modal('선택형 숙제 수정',`<label>숙제 이름</label><input id="gname" value="${esc(x.text)}"><label>선택지 (한 줄에 하나)</label><textarea id="gopts">${esc(x.options.join('\n'))}</textarea><div class="note">선택지 중 하나만 골라도 이 숙제는 완료 처리됩니다.</div>`,()=>{let n=document.getElementById('gname').value.trim(),opts=document.getElementById('gopts').value.split('\n').map(s=>s.trim()).filter(Boolean);if(!n||!opts.length)return;x.text=n;x.options=opts;if(!opts.includes(x.selected))x.selected='';save();closeModal();render()})}
+function removeItem(kind,itemId){if(!confirm('이 항목을 삭제할까요?'))return;C()[kind]=C()[kind].filter(x=>x.id!==itemId);save();render()}
+function addChar(){modal('부캐 추가',`<label>캐릭터 이름</label><input id="cname" placeholder="예: 부캐 1"><div class="note">새 캐릭터에는 현재 기본 구성과 동일한 일일/주간 숙제 페이지가 생성됩니다.</div>`,()=>{let n=document.getElementById('cname').value.trim();if(!n)return;let c={id:id(),name:n,...cloneDefaults()};data.characters.push(c);current=c.id;save();closeModal();render()})}
+function renameChar(){let c=C();modal('캐릭터 이름 수정',`<label>이름</label><input id="cname" value="${esc(c.name)}">`,()=>{let n=document.getElementById('cname').value.trim();if(!n)return;c.name=n;save();closeModal();render()})}
+function deleteChar(){if(data.characters.length===1){alert('캐릭터는 최소 1명 필요해요.');return}if(!confirm(C().name+' 캐릭터와 체크 기록을 삭제할까요?'))return;data.characters=data.characters.filter(x=>x.id!==current);current=data.characters[0].id;save();render()}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+render();setInterval(()=>{let d=data.lastDailyBoundary,w=data.lastWeeklyBoundary;if(d!==boundaryDaily()||w!==boundaryWeekly())render()},60000);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(console.error));
+}
+</script></body></html>
