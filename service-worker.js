@@ -1,4 +1,4 @@
-const CACHE = 'mabinogi-todo-v3';
+const CACHE = 'mabinogi-todo-v4';
 const ASSETS = [
   './',
   './index.html',
