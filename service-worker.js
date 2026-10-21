@@ -1,6 +1,8 @@
+// inline-assets 5-file build 2026-10-21e
+// pixel-assets build 2026-10-21d
 // mockup-match build 2026-10-21c
 // kawaii-window build 2026-10-21b
-const CACHE = 'mabinogi-mockup-20261021c';
+const CACHE = 'mabinogi-inline-20261021e';
 const ASSETS = [
   './',
   './index.html',
