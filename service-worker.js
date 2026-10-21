@@ -1,3 +1,4 @@
+// checkbox-center + scroll-center build
 // clean-vector-assets build 2026-10-21f
 // inline-assets 5-file build 2026-10-21e
 // pixel-assets build 2026-10-21d

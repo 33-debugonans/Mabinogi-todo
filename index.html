@@ -33,6 +33,35 @@ button,input{font:inherit}button{color:var(--ink);border:1.5px solid #d4c8dc;bac
 .modal{position:fixed;inset:0;background:#4a395744;display:none;align-items:center;justify-content:center;padding:16px;z-index:30}.modal.show{display:flex}.dialog{width:min(500px,100%);max-height:88vh;overflow:auto;background:#fffdfd;border:2px solid #8970ad;border-radius:15px;padding:0 16px 16px;box-shadow:0 20px 50px #3d294b33}.dialog:before{content:"🔴  🟡  🟢     MABINOGI_TASK.EXE                         ×";display:block;margin:0 -16px 15px;padding:11px 12px;background:#eee5ff;border-bottom:2px solid #8970ad;font-size:11px;font-weight:900}.dialog h3{margin:0 0 12px}.dialog input,.dialog textarea,.dialog select{width:100%;padding:9px;border:1.5px solid #d7cadf;border-radius:9px;margin:5px 0 11px}.dialog textarea{min-height:100px}.actions{display:flex;gap:8px;flex-wrap:wrap}.right{justify-content:flex-end}.note{font-size:11px;color:var(--muted)}
 @media(max-width:650px){.app{margin:0;border-left:0;border-right:0;border-radius:0}.windowbar{position:sticky;top:0;z-index:12}.hero{height:112px;padding:20px 100px 10px 130px}.hero:before{left:8px;width:125px;height:100px}.hero:after{right:-35px;width:145px;height:90px;opacity:.7}.hero h1{font-size:20px}.hero p{font-size:10px}.grid{padding-left:10px;padding-right:10px}.tabs{padding-left:10px}.char-title{padding-left:10px;flex-wrap:wrap}.history,.overall{margin-left:10px;margin-right:10px}.history{padding-right:115px}.history:after{width:105px}.options{grid-template-columns:1fr}.selected-summary{max-width:120px}}
 </style>
+
+<style>
+/* 2026-10-21 UI micro-fix: checkbox checkmark exact centering */
+.task input[type=checkbox]{
+  position:relative;
+  display:grid;
+  place-items:center;
+  padding:0;
+  line-height:1;
+}
+.task input[type=checkbox]:checked::after{
+  content:"✓";
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  line-height:1;
+  font-size:16px;
+  font-weight:900;
+  color:#fff;
+  transform:none;
+}
+</style>
+
 </head>
 <body><div class="app">
 <div class="windowbar"><div class="traffic"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="window-title">MABINOGI_TASK.EXE</div><div class="winbuttons"><span class="winbtn">−</span><span class="winbtn">□</span><span class="winbtn">×</span></div></div>
@@ -81,7 +110,7 @@ function render(){resetIfNeeded();let c=C();let od=c.daily.filter(x=>x.type==='t
 function renderHistory(c){let h=c.history||{};let dungeon=h.dungeon?`던전: <strong>${esc(h.dungeon)}</strong>${h.dungeonDate?` <span class="note">(${esc(h.dungeonDate)})</span>`:''}`:'';let hunt=h.hunt?`사냥터: <strong>${esc(h.hunt)}</strong>${h.huntDate?` <span class="note">(${esc(h.huntDate)})</span>`:''}`:'';document.getElementById('history').innerHTML=`<b>🕘 이전 기록</b>${dungeon||hunt?[dungeon,hunt].filter(Boolean).join(' · '):`<span class="empty">아직 저장된 이전 기록이 없어요. 던전이나 사냥터를 선택한 뒤 다음 일일 초기화부터 표시됩니다.</span>`}`}
 function renderList(kind,list){let html='';list.forEach(x=>{if(x.type==='task'){html+=`<div class="task ${x.done?'done':''}"><input type="checkbox" ${x.done?'checked':''} onchange="toggle('${kind}','${x.id}',this.checked)">${taskIcon(x.text)}<div class="txt">${esc(x.text)}</div><div class="mini-actions"><button class="small" onclick="editItem('${kind}','${x.id}')">✎</button><button class="small danger" onclick="removeItem('${kind}','${x.id}')">×</button></div></div>`}else{let completed=!!x.selected;html+=`<div class="section ${completed?'completed':''}" id="group_${x.id}"><div class="section-head"><div class="group-main" onclick="toggleGroupOpen('${x.id}')"><span class="section-title">${esc(x.text)}</span> <span class="pill">${completed?'✓ 완료':'1개 선택 시 완료'}</span>${completed?`<span class="selected-summary">${esc(x.selected)}</span>`:''}<button class="group-toggle" type="button">${completed?'▾':'▴'}</button></div><div class="mini-actions"><button class="small" onclick="event.stopPropagation();editGroup('${kind}','${x.id}')">✎</button><button class="small danger" onclick="event.stopPropagation();removeItem('${kind}','${x.id}')">×</button></div></div><div class="options">${x.options.map(o=>`<label class="option"><input type="radio" name="${current}_${x.id}" ${x.selected===o?'checked':''} onchange="selectGroup('${kind}','${x.id}',${JSON.stringify(o).replace(/"/g,'&quot;')})"><span>${esc(o)}</span></label>`).join('')}</div></div>`}});document.getElementById(kind).innerHTML=html;let done=list.filter(x=>x.type==='task'?x.done:!!x.selected).length,total=list.length,p=total?Math.round(done/total*100):0;document.getElementById(kind+'Count').textContent=`${done} / ${total} 완료 (${p}%)`;document.getElementById(kind+'Bar').style.width=p+'%'}
 function toggle(kind,itemId,val){let x=C()[kind].find(x=>x.id===itemId);x.done=val;save();render()}
-function selectGroup(kind,itemId,val){let x=C()[kind].find(x=>x.id===itemId);x.selected=val;save();render();requestAnimationFrame(()=>requestAnimationFrame(()=>{let el=document.getElementById('group_'+itemId);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}))}
+function selectGroup(kind,itemId,val){let x=C()[kind].find(x=>x.id===itemId);x.selected=val;save();render();requestAnimationFrame(()=>requestAnimationFrame(()=>{let el=document.getElementById('group_'+itemId);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})}))}
 function toggleGroupOpen(itemId){let el=document.getElementById('group_'+itemId);if(!el)return;el.classList.toggle('completed');let b=el.querySelector('.group-toggle');if(b)b.textContent=el.classList.contains('completed')?'▾':'▴'}
 function switchChar(cid){current=cid;save();render()}
 function modal(title,body,onSave){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalSave').onclick=onSave;document.getElementById('modal').classList.add('show')}
