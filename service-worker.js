@@ -1,3 +1,4 @@
+// backup-restore build
 // cheek-cat launcher icon build
 // checkbox-center + scroll-center build
 // clean-vector-assets build 2026-10-21f
@@ -5,7 +6,7 @@
 // pixel-assets build 2026-10-21d
 // mockup-match build 2026-10-21c
 // kawaii-window build 2026-10-21b
-const CACHE = 'mabinogi-cheekcat-icon-20261021';
+const CACHE = 'mabinogi-backuprestore-20261021';
 const ASSETS = [
   './',
   './index.html',
