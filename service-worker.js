@@ -1,5 +1,6 @@
+// mockup-match build 2026-10-21c
 // kawaii-window build 2026-10-21b
-const CACHE = 'mabinogi-todo-v20261021-pastel-scroll';
+const CACHE = 'mabinogi-mockup-20261021c';
 const ASSETS = [
   './',
   './index.html',
