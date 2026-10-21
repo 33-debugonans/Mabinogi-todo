@@ -1,3 +1,4 @@
+// kawaii-window build 2026-10-21b
 const CACHE = 'mabinogi-todo-v20261021-pastel-scroll';
 const ASSETS = [
   './',
